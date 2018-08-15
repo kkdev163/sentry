@@ -749,6 +749,7 @@ function routes() {
                 import(/*webpackChunkName: HealthOverview*/ './views/organizationHealth/overview')}
               component={errorHandler(LazyLoad)}
             />
+
             <Route
               path="errors"
               componentPromise={() =>
@@ -760,6 +761,13 @@ function routes() {
               path="transactions"
               componentPromise={() =>
                 import(/*webpackChunkName: HealthTransactions*/ './views/organizationHealth/transactions')}
+              component={errorHandler(LazyLoad)}
+            />
+
+            <Route
+              path="browsers"
+              componentPromise={() =>
+                import(/*webpackChunkName: HealthErrors*/ './views/organizationHealth/browsers')}
               component={errorHandler(LazyLoad)}
             />
           </Route>
