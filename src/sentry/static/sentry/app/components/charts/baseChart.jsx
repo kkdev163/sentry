@@ -59,6 +59,12 @@ class BaseChart extends React.Component {
 
     // states whether not to update chart immediately
     lazyUpdate: PropTypes.bool,
+
+    // Map of eventName -> function for echarts events
+    onEvents: PropTypes.object,
+
+    // Forwarded Ref
+    forwardedRef: PropTypes.object,
   };
 
   static defaultProps = {
@@ -96,11 +102,13 @@ class BaseChart extends React.Component {
       lazyUpdate,
       silent,
       style,
+      onEvents,
+      forwardedRef,
     } = this.props;
 
     return (
       <ReactEchartsCore
-        ref={e => (this.chart = e)}
+        ref={forwardedRef}
         echarts={echarts}
         option={{
           color: colors || this.getColorPalette(),
@@ -113,9 +121,7 @@ class BaseChart extends React.Component {
         silent={silent}
         theme={this.props.theme}
         onChartReady={this.handleChartReady}
-        onEvents={{
-          /* TBD */
-        }}
+        onEvents={onEvents}
         opts={{
           height,
           width,
@@ -131,4 +137,10 @@ class BaseChart extends React.Component {
     );
   }
 }
-export default BaseChart;
+
+const BaseChartRef = React.forwardRef((props, ref) => (
+  <BaseChart forwardedRef={ref} {...props} />
+));
+BaseChartRef.displayName = 'forwardRef(BaseChart)';
+
+export default BaseChartRef;
