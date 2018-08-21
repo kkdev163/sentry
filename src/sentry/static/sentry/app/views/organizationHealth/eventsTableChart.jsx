@@ -3,18 +3,19 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import styled from 'react-emotion';
 
+import Count from 'app/components/count';
 import InlineSvg from 'app/components/inlineSvg';
 import TableChart from 'app/components/charts/tableChart';
 import overflowEllipsis from 'app/styles/overflowEllipsis';
 import space from 'app/styles/space';
 
 const Delta = ({current, previous, className}) => {
-  const changePercent = Math.round(Math.abs(current - previous) / (current + previous));
+  const changePercent = Math.round(Math.abs(current - previous) / previous * 100);
   const direction = !changePercent ? 0 : current - previous;
   return (
     <StyledDelta direction={direction} className={className}>
       {!!direction && <DeltaCaret direction={direction} src="icon-chevron-down" />}
-      {changePercent}%
+      {changePercent !== 0 ? `${changePercent}%` : <span>&mdash;</span>}
     </StyledDelta>
   );
 };
@@ -35,7 +36,8 @@ const StyledDelta = styled(Flex)`
   padding: 0 ${space(0.25)};
   margin-right: ${space(0.5)};
   font-size: ${p => p.theme.fontSizeSmall};
-  color: ${p => (p.direction > 0 ? p.theme.green : p.theme.red)};
+  color: ${p =>
+    p.direction > 0 ? p.theme.green : p.direction < 0 ? p.theme.red : p.theme.gray2};
 `;
 
 class EventsTableChart extends React.Component {
@@ -43,15 +45,13 @@ class EventsTableChart extends React.Component {
     headers: PropTypes.arrayOf(PropTypes.node),
     data: PropTypes.arrayOf(
       PropTypes.shape({
-        name: PropTypes.string,
+        name: PropTypes.node,
         percentage: PropTypes.number,
         count: PropTypes.number,
         lastCount: PropTypes.number,
       })
     ),
   };
-
-  getDifference(count, lastCount) {}
 
   render() {
     const {headers, data} = this.props;
@@ -63,7 +63,7 @@ class EventsTableChart extends React.Component {
           <Name key="name">{name}</Name>,
           <Events key="events">
             <Delta current={count} previous={lastCount} />
-            <span>{count}</span>
+            <Count value={count} />
           </Events>,
           <React.Fragment key="bar">
             <BarWrapper>
@@ -71,19 +71,14 @@ class EventsTableChart extends React.Component {
             </BarWrapper>
             <span>{percentage}%</span>
           </React.Fragment>,
-          <LastEvent key="time-ago">5 minutes ago</LastEvent>,
+          <LastEvent key="time-ago">n/a</LastEvent>,
         ])}
         renderRow={({items}) => (
           <React.Fragment>
-            <Flex
-              flex={1}
-              style={{flexShrink: 0, marginRight: 18}}
-              justify="space-between"
-              align="center"
-            >
+            <NameAndEventsContainer flex={1} justify="space-between" align="center">
               <div>{items[0]}</div>
               <div>{items[1]}</div>
-            </Flex>
+            </NameAndEventsContainer>
             <Flex flex={3} justify="space-between" align="center">
               <Flex w={[3 / 4]} align="center" key="bar">
                 {items[2]}
@@ -101,6 +96,11 @@ class EventsTableChart extends React.Component {
 
 const StyledEventsTableChart = styled(EventsTableChart)`
   width: 100%;
+`;
+
+const NameAndEventsContainer = styled(Flex)`
+  flex-shrink: 0;
+  margin-right: ${space(2)};
 `;
 
 const BarWrapper = styled('div')`

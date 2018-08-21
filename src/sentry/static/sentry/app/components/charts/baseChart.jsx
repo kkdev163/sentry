@@ -61,7 +61,10 @@ class BaseChart extends React.Component {
     lazyUpdate: PropTypes.bool,
 
     // Map of eventName -> function for echarts events
-    onEvents: PropTypes.object,
+    onEvents: PropTypes.shape({
+      highlight: PropTypes.func,
+      mouseover: PropTypes.func,
+    }),
 
     // Forwarded Ref
     forwardedRef: PropTypes.object,

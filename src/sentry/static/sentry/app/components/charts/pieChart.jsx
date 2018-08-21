@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 
 import Legend from './components/legend';
@@ -8,6 +9,9 @@ class PieChart extends React.Component {
   static propTypes = {
     // We passthrough all props exception `options`
     ...BaseChart.propTypes,
+
+    // Attempt to select first series in chart (to show in center of PieChart)
+    selectOnRender: PropTypes.bool,
   };
 
   constructor(props) {
@@ -18,6 +22,12 @@ class PieChart extends React.Component {
   }
 
   componentDidMount() {
+    let {selectOnRender} = this.props;
+
+    if (!selectOnRender) return;
+
+    // Timeout is because we need to wait for rendering animation to complete
+    // And I haven't found a callback for this
     setTimeout(() => this.highlight(0), 1000);
   }
 
@@ -34,6 +44,9 @@ class PieChart extends React.Component {
         {}
       );
   };
+
+  // Select a series to highlight (e.g. shows details of series)
+  // This is the same event as when you hover over a series in the chart
   highlight = dataIndex => {
     if (!this.chart.current) return;
 
@@ -44,6 +57,7 @@ class PieChart extends React.Component {
     });
   };
 
+  // Opposite of `highlight`
   downplay = dataIndex => {
     if (!this.chart.current) return;
 
