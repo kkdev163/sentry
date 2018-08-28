@@ -89,6 +89,7 @@ const OrganizationHealthErrors = styled(
     };
 
     handleSetFilter = (tag, value) => {
+      console.log('set filter', tag, value);
       this.props.actions.setFilter(tag, value);
     };
 
@@ -112,10 +113,15 @@ const OrganizationHealthErrors = styled(
               interval="1d"
               getCategory={value => (value ? 'Handled' : 'Crash')}
             >
-              {({data, loading}) => {
+              {({data, previousPeriod, loading}) => {
                 if (!data) return null;
                 return (
-                  <StyledPanelChart height={200} title={t('Errors')} series={data}>
+                  <StyledPanelChart
+                    height={200}
+                    title={t('Errors')}
+                    series={data}
+                    previousPeriod={previousPeriod}
+                  >
                     {props => <AreaChart {...props} />}
                   </StyledPanelChart>
                 );
@@ -175,10 +181,15 @@ const OrganizationHealthErrors = styled(
             </ReleasesRequest>
 
             <ReleasesRequest limit={10} organization={organization}>
-              {({data, loading}) => {
+              {({data, loading, previousPeriod}) => {
                 if (!data) return null;
                 return (
-                  <StyledPanelChart height={200} title={t('Releases')} series={data}>
+                  <StyledPanelChart
+                    height={200}
+                    title={t('Releases')}
+                    series={data}
+                    previousPeriod={previousPeriod}
+                  >
                     {props => <AreaChart {...props} />}
                   </StyledPanelChart>
                 );

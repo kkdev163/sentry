@@ -190,6 +190,7 @@ SnubaLookup(
 )
 SnubaLookup('release', 'tags[sentry:release]', serializer=serialize_releases)
 SnubaLookup('os.name', 'tags[os.name]')
+SnubaLookup('transaction', 'tags[transaction]')
 SnubaLookup('device', 'tags[device]')
 SnubaLookup('device.family', 'tags[device_family]')
 SnubaLookup('browser.name', 'tags[browser.name]', conditions=[])

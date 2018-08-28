@@ -335,7 +335,7 @@ export const TableChart = styled(
 export default TableChart;
 
 export const TableChartRow = styled(
-  class extends React.Component {
+  class TableChartRowComponent extends React.Component {
     static propTypes = {
       /**
        * Show percentage as a bar in the row
