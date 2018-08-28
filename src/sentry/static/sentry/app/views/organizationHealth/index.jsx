@@ -21,17 +21,13 @@ class OrganizationHealth extends React.Component {
 
   constructor(props) {
     super(props);
-    let {organization} = props;
-    let projects =
-      organization.projects &&
-      organization.projects.filter(({isMember}) => isMember).map(({id}) => id);
 
     this.state = {
       actions: {
         updateParams: this.updateParams,
         setFilter: this.setFilter,
       },
-      projects,
+      projects: [],
       environments: [],
       period: '7d',
       filters: [],
@@ -79,6 +75,7 @@ class OrganizationHealth extends React.Component {
             <Content>
               <Header>
                 <MultipleProjectSelector
+                  anchorRight={false}
                   projects={projects}
                   value={this.state.projects}
                   onChange={this.handleChangeProjects}
