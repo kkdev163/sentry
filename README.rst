@@ -1,4 +1,4 @@
-Welcome to Sentry
+Welcome to Sentry-by kkdev163
 .. raw:: html
 
    <p align="center">
